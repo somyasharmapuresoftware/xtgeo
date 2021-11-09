@@ -21,6 +21,7 @@ jobs:
         pytest tests/test_common --disable-warnings -x --hypothesis-profile ci --generate-plots
       CIBW_BUILD: ${{ matrix.cibw_python }}-manylinux_x86_64
       CIBW_MANYLINUX_X86_64_IMAGE: manylinux2010
+      CIBW_ARCHS_LINUX: ${{matrix.arch}}
       CIBW_BUILD_AARCH64: ${{ matrix.cibw_python }}-manylinux2014_aarch64
       CIBW_MANYLINUX_AARCH64_IMAGE: manylinux2014
 
