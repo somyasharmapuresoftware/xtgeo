@@ -7,7 +7,7 @@ on: [push, pull_request]
 # Verify that wheel build jobs succeed
 jobs:
   build_linux_cibuildwheel:
-    name: CIBW python ${{ matrix.cibw_python }} on ${{ matrix.os }}
+    name: CIBW python ${{ matrix.cibw_python }} on ${{matrix.arch}} for ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
     env:
@@ -21,15 +21,25 @@ jobs:
         pytest tests/test_common --disable-warnings -x --hypothesis-profile ci --generate-plots
       CIBW_BUILD: ${{ matrix.cibw_python }}-manylinux_x86_64
       CIBW_MANYLINUX_X86_64_IMAGE: manylinux2010
+      CIBW_BUILD_AARCH64: ${{ matrix.cibw_python }}-manylinux2014_aarch64
+      CIBW_MANYLINUX_AARCH64_IMAGE: manylinux2014
 
     strategy:
       matrix:
         os: [ubuntu-latest]
         cibw_python: [cp36, cp39]
+        arch: [auto]
+        include:
+          - arch: aarch64
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python
+        if: ${{ matrix.arch == 'x86_64' }}
         uses: actions/setup-python@v2
+        
+      - name: Set up QEMU
+        if:  ${{ matrix.arch == 'aarch64' }}
+        uses: docker/setup-qemu-action@v1
 
       - name: Install cibuildwheel
         run: >
