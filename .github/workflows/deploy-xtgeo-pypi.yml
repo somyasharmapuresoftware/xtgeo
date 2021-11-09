@@ -49,6 +49,57 @@ jobs:
           pip install twine &&
           twine upload wheelhouse/*
 
+  deploy_linux_aarch64_cibuildwheel:
+    name: CIBW deploy ${{ matrix.cibw_python }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    env:
+      CIBW_BEFORE_TEST: >
+        pushd {project} &&
+        pip install -r requirements/requirements.txt &&
+        pip install -r requirements/requirements_test.txt &&
+        git clone --depth 1 https://github.com/equinor/xtgeo-testdata ../xtgeo-testdata
+      CIBW_TEST_COMMAND: >
+        pushd {project} &&
+        pytest tests --disable-warnings --hypothesis-profile ci --generate-plots
+      CIBW_BUILD: ${{ matrix.cibw_python }}-manylinux2014_aarch64
+      CIBW_MANYLINUX_AARCH64_IMAGE: manylinux2014
+
+      py: /opt/python/${{ matrix.python-version }}/bin/python
+      img: quay.io/pypa/manylinux2014_aarch64
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        cibw_python: ['cp36-cp36m', 'cp37-cp37m', 'cp38-cp38', 'cp39-cp39']
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up QEMU
+        id: qemu
+        uses: docker/setup-qemu-action@v1
+
+      - name: Install cibuildwheel
+        run: |
+          docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
+          ${{ env.img }} \
+          bash -exc '${{ env.py }} -m venv .env && \
+          source .env/bin/activate && \
+          python -m pip install pip -U && \
+          python -m pip install wheel && \
+          python -m pip install cibuildwheel && \
+          echo "Build wheels and test" && \
+          python -m cibuildwheel --output-dir wheelhouse && \
+          deactivate'
+
+      - name: Publish to PYPI Linux
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_SECRET }}
+        run: >
+          pip install twine &&
+          twine upload wheelhouse/*
+
+
   deploy_macos_cibuildwheel:
     name: CIBW deploy ${{ matrix.cibw_python }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
