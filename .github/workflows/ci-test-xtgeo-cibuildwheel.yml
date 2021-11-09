@@ -1,8 +1,8 @@
 name: cibuildwheel
 
-on:
-  pull_request:
-      branches: [master, "*postfix"]
+on: [push, pull_request]
+  #pull_request:
+   #   branches: [master, "*postfix"]
 
 # Verify that wheel build jobs succeed
 jobs:
@@ -56,11 +56,14 @@ jobs:
         pytest tests/test_common --disable-warnings -x --hypothesis-profile ci --generate-plots
       CIBW_BUILD: ${{ matrix.cibw_python }}-manylinux2014_aarch64
       CIBW_MANYLINUX2014_AARCH64_IMAGE: manylinux2014_aarch64
+      py: /opt/python/${{ matrix.cibw_python }}/bin/python
+      img: quay.io/pypa/manylinux2014_aarch64
 
     strategy:
       matrix:
         os: [ubuntu-latest]
-        cibw_python: [cp36, cp39]
+        cibw_python: ['cp36-cp36m', 'cp37-cp37m', 'cp38-cp38', 'cp39-cp39']
+        
     steps:
       - uses: actions/checkout@v2
       - name: Set up QEMU
