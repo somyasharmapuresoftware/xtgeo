@@ -15,11 +15,11 @@ jobs:
         pushd {project} &&
         pip install -r requirements/requirements.txt &&
         pip install -r requirements/requirements_test.txt &&
-        git clone --depth 1 https://github.com/equinor/xtgeo-testdata ../xtgeo-testdata
+        #git clone --depth 1 https://github.com/equinor/xtgeo-testdata ../xtgeo-testdata
       CIBW_TEST_COMMAND: >
         pushd {project} &&
         pytest tests/test_common --disable-warnings -x --hypothesis-profile ci --generate-plots
-      CIBW_BUILD: ${{ matrix.cibw_python }}-*
+      CIBW_BUILD: "cp36-* cp39-*"
       CIBW_MANYLINUX_X86_64_IMAGE: manylinux2010
       CIBW_ARCHS_LINUX: ${{matrix.arch}}
       CIBW_MANYLINUX_AARCH64_IMAGE: quay.io/pypa/manylinux2014_aarch64
@@ -27,12 +27,12 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        cibw_python: [cp36, cp39]
+        #cibw_python: [cp36, cp39]
         arch: [auto]
         include:
           - os: ubuntu-latest
             arch: aarch64
-            cibw_python: "cp36-*"
+            #cibw_python: "cp36-*"
             
     steps:
       - uses: actions/checkout@v2
@@ -52,6 +52,7 @@ jobs:
 
       - name: Build wheels and test
         run: |
+          git clone --depth 1 https://github.com/equinor/xtgeo-testdata ../xtgeo-testdata
           python -m cibuildwheel --output-dir wheelhouse
 
   build_macos_cibuildwheel:
