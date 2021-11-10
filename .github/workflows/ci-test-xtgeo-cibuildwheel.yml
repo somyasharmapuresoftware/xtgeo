@@ -7,7 +7,7 @@ on: [push, pull_request]
 # Verify that wheel build jobs succeed
 jobs:
   build_linux_cibuildwheel:
-    name: CIBW python on ${{matrix.arch}} for ${{ matrix.os }}
+    name: CIBW python ${{ matrix.cibw_python }} on ${{matrix.arch}} for ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
     env:
@@ -28,11 +28,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         cibw_python: [cp36-*, cp39-*]
-        arch: [x86_64]
-        include:
-          - os: ubuntu-latest
-            arch: aarch64
-            #cibw_python: "cp36-*"
+        arch: [x86_64, aarch64]
             
     steps:
       - uses: actions/checkout@v2
