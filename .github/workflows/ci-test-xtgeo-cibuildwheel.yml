@@ -32,10 +32,7 @@ jobs:
         include:
           - os: ubuntu-latest
             arch: aarch64
-            cibw_python: cp36
-          - os: ubuntu-latest
-            arch: aarch64
-            cibw_python: cp39
+            cibw_python: "cp36-* cp39-*"
             
     steps:
       - uses: actions/checkout@v2
