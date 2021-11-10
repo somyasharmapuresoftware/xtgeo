@@ -23,6 +23,7 @@ jobs:
       CIBW_MANYLINUX_X86_64_IMAGE: manylinux2010
       CIBW_ARCHS_LINUX: ${{matrix.arch}}
       CIBW_MANYLINUX_AARCH64_IMAGE: quay.io/pypa/manylinux2014_aarch64
+      CIBW_SKIP: musllinux_x86_64*
 
     strategy:
       matrix:
