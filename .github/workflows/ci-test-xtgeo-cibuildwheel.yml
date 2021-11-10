@@ -28,11 +28,11 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         cibw_python: [cp36-*, cp39-*]
-        arch: [auto]
+        arch: [x86_64]
         include:
           - os: ubuntu-latest
             arch: aarch64
-            cibw_python: "cp36-*"
+            #cibw_python: "cp36-*"
             
     steps:
       - uses: actions/checkout@v2
