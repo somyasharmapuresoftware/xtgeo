@@ -37,7 +37,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python
-        if: ${{ matrix.arch == 'x86_64' }}
+        #if: ${{ matrix.arch == 'x86_64' }}
         uses: actions/setup-python@v2
         
       - name: Set up QEMU
