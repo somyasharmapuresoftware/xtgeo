@@ -7,7 +7,7 @@ on: [push, pull_request]
 # Verify that wheel build jobs succeed
 jobs:
   build_linux_cibuildwheel:
-    name: CIBW python ${{ matrix.cibw_python }} on ${{matrix.arch}} for ${{ matrix.os }}
+    name: CIBW python ${{ env.CIBW_BUILD }} on ${{matrix.arch}} for ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
     env:
