@@ -23,7 +23,7 @@ jobs:
       CIBW_BUILD: ${{ matrix.cibw_python }}
       #CIBW_MANYLINUX_X86_64_IMAGE: manylinux2010
       CIBW_MANYLINUX_*_IMAGE: "manylinux2010 manylinux2014"
-      CIBW_SKIP: "*-manylinux_i686 *-musllinux"
+      CIBW_SKIP: "*-manylinux_i686* *-musllinux*"
       CIBW_ARCHS_LINUX: ${{matrix.arch}}
       #CIBW_MANYLINUX_AARCH64_IMAGE: quay.io/pypa/manylinux2014_aarch64
 
