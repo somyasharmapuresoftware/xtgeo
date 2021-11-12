@@ -16,8 +16,8 @@ jobs:
         pip install -r requirements/requirements.txt &&
         pip install -r requirements/requirements_test.txt &&
         git clone --depth 1 https://github.com/equinor/xtgeo-testdata ../xtgeo-testdata &&
-        python -m pip install –-upgrade pip &&
-        pip install scikit-build
+        pip install –-upgrade pip &&
+        #pip install scikit-build
       CIBW_TEST_COMMAND: >
         pushd {project} &&
         pytest tests/test_common --disable-warnings -x --hypothesis-profile ci --generate-plots
