@@ -13,11 +13,10 @@ jobs:
     env:
       CIBW_BEFORE_TEST: >
         pushd {project} &&
+        pip install –-upgrade pip &&
         pip install -r requirements/requirements.txt &&
         pip install -r requirements/requirements_test.txt &&
-        git clone --depth 1 https://github.com/equinor/xtgeo-testdata ../xtgeo-testdata &&
-        pip install –-upgrade pip
-        #pip install scikit-build
+        git clone --depth 1 https://github.com/equinor/xtgeo-testdata ../xtgeo-testdata
       CIBW_TEST_COMMAND: >
         pushd {project} &&
         pytest tests/test_common --disable-warnings -x --hypothesis-profile ci --generate-plots
