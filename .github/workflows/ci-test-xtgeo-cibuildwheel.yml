@@ -11,6 +11,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     env:
+      CIBW_BEFORE_BUILD: "pip install scikit-build"
       CIBW_BEFORE_TEST: >
         pushd {project} &&
         pip install -r requirements/requirements.txt &&
